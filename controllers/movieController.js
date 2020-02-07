@@ -101,7 +101,7 @@ class movieController{
     MovieUser.destroy({
       where:{
         UserId: req.currentUserId,
-        MovieId: req.body.movieId
+        MovieId: req.params.id
       }
     })
     .then(data =>{
