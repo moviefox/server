@@ -1,16 +1,15 @@
 const { User, Movie } = require('../models')
-var jwt = require('jsonwebtoken');
-var bcrypt = require('bcryptjs');
-const {OAuth2Client} = require('google-auth-library');
+const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
 class userController {
 
-  static gSign(req, res) {
+  static gSign(req, res, next) {
     let payload
     client.verifyIdToken({
-      idToken: token,
-      audience: CLIENT_ID
+      idToken: req.headers.token,
+      audience: process.env.CLIENT_ID
     })
       .then(ticket => {
         payload = ticket.getPayload();
@@ -22,10 +21,9 @@ class userController {
         })
       })
       .then(userData => {
-
         if (!userData) {
           return User.create({
-            name: payload.given_name,
+            username: payload.name,
             email: payload.email,
             password: process.env.PWD
           })
@@ -35,15 +33,14 @@ class userController {
         }
       })
       .then(user => {
-        const token = jwt.sign({ id: user.id }, process.env.SECRET)
-        const name = payload.given_name;
+        const token = jwt.sign({ id: user.id, email: user.email, username: user.username }, process.env.SECRET)
+        const name = payload.name;
         const pic = payload.picture
         res.status(200).json({ token, name, pic })
       })
 
       .catch(err => {
-        res.status(500).json(err)
-
+        next(err)
       })
   }
 
@@ -77,7 +74,7 @@ class userController {
       })
   }
 
- 
+
 }
 
 module.exports = userController
