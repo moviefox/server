@@ -34,18 +34,67 @@ class movieController{
   }
 
   static popular(req, res){
+    let tmdb = process.env.TMDB
+    // console.log(tmdb);
+    
     axios({
       method:'get',
-      url: `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.TMDB}`
+      url: `https://api.themoviedb.org/3/trending/all/week?api_key=${tmdb}`
     })
-    .then(data =>{
+    .then(({data}) =>{
+      console.log(data);
+      
       res.status(200).json(data)
     })
     .catch(err =>{
+      console.log(err);
+      
       res.status(500).json(err)
     })
 
 
+  }
+
+  static detail(req, res){
+    let omdb = process.env.OMDB
+    // let tmdb = process.env.TMDB
+    let title = req.body.title
+
+    axios({
+      method:'get',
+      url: `http://www.omdbapi.com/?t=${title}&apikey=${omdb}`
+    })
+    .then(({data}) =>{
+      // console.log(data);
+      
+      res.status(200).json(data)
+    })
+    .catch(err =>{
+      // console.log(err);
+      
+      res.status(500).json(err)
+    })
+  }
+
+  static search(req, res){
+    // let omdb = process.env.OMDB
+    let tmdb = process.env.TMDB
+    let title = req.body.title
+
+    axios({
+      method:'get',
+      url: `https://api.themoviedb.org/3/search/movie?api_key=${tmdb}&query=${title}`
+    })
+    .then(({data}) =>{
+      // console.log(data);
+      
+      res.status(200).json(data)
+    })
+    .catch(err =>{
+      // console.log(err);
+      
+      res.status(500).json(err)
+    })
   }
 
   static remove(req, res){
