@@ -1,4 +1,5 @@
 const {Movie, MovieUser} = require('../models')
+const axios = require('axios')
 
 class movieController{
 
@@ -32,12 +33,33 @@ class movieController{
     
   }
 
+  static popular(req, res){
+    axios({
+      method:'get',
+      url: `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.TMDB}`
+    })
+    .then(data =>{
+      res.status(200).json(data)
+    })
+    .catch(err =>{
+      res.status(500).json(err)
+    })
+
+
+  }
+
   static remove(req, res){
     MovieUser.destroy({
       where:{
         UserId: req.body.user,
         MovieId: req.body.movieId
       }
+    })
+    .then(data =>{
+      res.status(200).json(data)
+    })
+    .catch(err =>{
+      res.status(500).json(err)
     })
   }
 }

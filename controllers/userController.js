@@ -1,4 +1,8 @@
 const { User, Movie } = require('../models')
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcryptjs');
+const {OAuth2Client} = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 class userController {
 
