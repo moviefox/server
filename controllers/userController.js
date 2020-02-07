@@ -13,7 +13,6 @@ class userController {
     })
       .then(ticket => {
         payload = ticket.getPayload();
-        console.log(payload, 'isi payload');
         return User.findOne({
           where: {
             email: payload.email
@@ -59,7 +58,7 @@ class userController {
   }
 
   static getMovie(req, res) {
-    let user_id = req.body.user
+    let user_id = req.currentUserId
     User.findAll({
       include: [Movie],
       where: {
