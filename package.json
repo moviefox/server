@@ -1,24 +1,26 @@
 {
-  "name": "server",
+  "name": "movie-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "NODE_ENV=development nodemon app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/moviefox/server.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "moviefox",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/moviefox/server/issues"
   },
   "homepage": "https://github.com/moviefox/server#readme",
   "dependencies": {
-    "bcrypt": "^3.0.8",
+    "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
