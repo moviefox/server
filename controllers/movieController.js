@@ -19,7 +19,7 @@ class movieController{
       
       return MovieUser.findOrCreate({
         where:{
-          UserId: req.body.user,
+          UserId: req.currentUserId,
           MovieId: data[0].id
         }
       })
@@ -100,7 +100,7 @@ class movieController{
   static remove(req, res){
     MovieUser.destroy({
       where:{
-        UserId: req.body.user,
+        UserId: req.currentUserId,
         MovieId: req.body.movieId
       }
     })
