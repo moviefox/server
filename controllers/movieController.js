@@ -52,14 +52,19 @@ class movieController {
       })
   }
 
-  static search(req, res) {
+  static search(req, res, next) {
     // let omdb = process.env.OMDB
     let tmdb = process.env.TMDB
-    let title = req.body.title
-
+    let title = req.query.title
+    let page = req.params.page
     axios({
       method: 'get',
-      url: `https://api.themoviedb.org/3/search/movie?api_key=${tmdb}&query=${title}`
+      url: `https://api.themoviedb.org/3/search/movie`,
+      params: {
+        page,
+        api_key: tmdb,
+        query: title
+      }
     })
       .then(({ data }) => {
         // console.log(data);
@@ -67,8 +72,7 @@ class movieController {
         res.status(200).json(data)
       })
       .catch(err => {
-        // console.log(err);
-        res.status(500).json(err)
+        next(err)
       })
 
   }
