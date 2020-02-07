@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
+    "username": "postgre",
+    "password": "postgre",
+    "database": "moviefox",
     "host": "127.0.0.1",
     "dialect": "postgres",
     "operatorsAliases": false
