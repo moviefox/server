@@ -52,6 +52,23 @@ class movieController {
       })
   }
 
+  static bioskop(req, res, next){
+    axios({
+      method: 'get',
+      url: ` https://rest.farzain.com/api/special/bioskop/bioskop.php`,
+      params:{
+        id: req.params.loc,
+        apikey: process.env.BIOSKOP
+      }
+    })
+      .then(({ data }) => {
+        // console.log(data);
+
+        res.status(200).json(data)
+      })
+      .catch(next)
+  }
+
   static search(req, res, next) {
     // let omdb = process.env.OMDB
     let tmdb = process.env.TMDB
