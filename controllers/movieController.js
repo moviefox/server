@@ -4,7 +4,6 @@ const axios = require('axios')
 class movieController {
 
   static add(req, res, next) {
-    // console.log(req.body);
     Movie.findOrCreate({
       where: {
         title: req.body.title,
