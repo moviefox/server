@@ -1,9 +1,15 @@
 const router = require('express').Router()
 const movieController = require('../controllers/movieController')
+const { authenticated, authorized } = require('../middlewares')
 
-router.post('/', movieController.add)
-router.delete('/:id', movieController.remove)
 router.get('/popular/:page', movieController.popular)
 router.get('/search/:page', movieController.search)
-router.get('/detail', movieController.detail)
+router.post('/detail', movieController.detail)
+
+
+router.use(authenticated)
+router.post('/', movieController.add)
+
+router.use('/:id', authorized)
+router.delete('/:id', movieController.remove)
 module.exports = router
