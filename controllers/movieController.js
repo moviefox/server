@@ -33,10 +33,45 @@ class movieController {
 
   static detail(req, res) {
     let omdb = process.env.OMDB
+    let tmdb = process.env.TMDB
+    let detail 
     let title = req.body.title
     axios({
       method: 'get',
       url: `http://www.omdbapi.com/?t=${title}&apikey=${omdb}`
+    })
+    .then(({ data }) => {
+      detail = data
+      // console.log(data.imdbID);
+      let imdb = data.imdbID
+      
+      return axios({
+        method: 'get',
+        url: `https://api.themoviedb.org/3/movie/${imdb}?api_key=${tmdb}&language=en-US&append_to_response=videos`
+      })
+    })
+    .then(({data}) =>{
+      console.log('masuk detail', data.videos.results[0].key);
+      
+      detail.trailer =  `https://www.youtube.com/watch?v=${data.videos.results[0].key}`
+      res.status(200).json(detail)
+      
+    })
+    .catch(err => {
+      // console.log(err);
+
+      res.status(500).json(err)
+    })
+  }
+
+  static bioskop(req, res, next){
+    axios({
+      method: 'get',
+      url: ` https://rest.farzain.com/api/special/bioskop/bioskop.php`,
+      params:{
+        id: req.params.loc,
+        apikey: process.env.BIOSKOP
+      }
     })
       .then(({ data }) => {
         // console.log(data);
@@ -58,7 +93,8 @@ class movieController {
       params: {
         page,
         api_key: tmdb,
-        query: title
+        query: title,
+        append_to_response: 'videos'
       }
     })
       .then(({ data }) => {
