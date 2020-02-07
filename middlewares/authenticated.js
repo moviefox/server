@@ -1,38 +1,41 @@
 const jwt = require('jsonwebtoken')
-const {User} = require('../models')
+const { User } = require('../models')
 
-module.exports=
+module.exports =
   function (req, res, next) {
-    const {token} = req.headers
-    if(token){
+    const { token } = req.headers
+    if (token) {
       const decoded = jwt.verify(token, process.env.SECRET);
-      
       if (decoded) {
         req.currentUserId = decoded.id
         // console.log(req.currentUserId, 'dari uthenticated');
-        // console.log('masuk kesini', decoded);  
-
+        // console.log('masuk kesini', decoded);
         User.findOne({
-          where:{
+          where: {
             id: decoded.id
           }
         })
-        .then(data =>{
-          if(data){
+          .then(data => {
+            if (data) {
               next();
-          }
-      })
-      .catch(err =>{
-          res.status(500).json(err)  
-      })
-      }else{
+            } else {
+              next({
+                status: 401,
+                message: 'Please login first'
+              })
+            }
+          })
+          .catch(err => {
+            res.status(500).json(err)
+          })
+      } else {
         res.status(400).json({
           msg: `Access token invalid`
-      })
+        })
       }
-    }else{
+    } else {
       res.status(404).json({
         msg: `Access token not found`
-    })
+      })
     }
   }

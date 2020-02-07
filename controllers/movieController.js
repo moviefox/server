@@ -33,22 +33,17 @@ class movieController {
 
   static detail(req, res) {
     let omdb = process.env.OMDB
-    // let tmdb = process.env.TMDB
     let title = req.body.title
-
     axios({
       method: 'get',
       url: `http://www.omdbapi.com/?t=${title}&apikey=${omdb}`
     })
       .then(({ data }) => {
         // console.log(data);
-
         res.status(200).json(data)
       })
       .catch(err => {
-        // console.log(err);
-
-        res.status(500).json(err)
+        next(err)
       })
   }
 
@@ -67,14 +62,11 @@ class movieController {
       }
     })
       .then(({ data }) => {
-        // console.log(data);
-
         res.status(200).json(data)
       })
       .catch(err => {
         next(err)
       })
-
   }
 
   static popular(req, res, next) {
